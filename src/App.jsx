@@ -7,50 +7,48 @@ function App() {
   const [inputVal, setInputVal] = useState("");
   const parentRef = useRef();
 
-  const prevHeight = useRef();
+  // const prevHeight = useRef();
+  console.log(messages);
+  const handleSubmit = async () => {
+    try {
+      const { data } = await axios.get(
+        `https://jsonplaceholder.typicode.com/photos?_start=${2}&_limit=5`
+      );
 
-  useEffect(() => {
-    console.log("old:", prevHeight?.current);
-    console.log("new:", parentRef?.current?.scrollHeight);
+      setMessages((prev) => [...data, ...prev]);
+    } catch (error) {
+      console.log(error);
+    }
 
-    // const update = () => {
-    //   if (parentRef.current.scrollTop == 0) return;
-
-    //   const newHeight = parentRef.current.scrollHeight;
-    //   const diff = newHeight - prevHeight.current;
-    //   console.log(parentRef.current.scrollTop, "top");
-
-    //   // parentRef.current.scrollTop = parentRef.current.scrollTop + diff;
-    // };
-
-    // requestAnimationFrame((e) => {
-    //   update();
-    // });
-  }, [messages]);
-
-  const handleSubmit = () => {
-    prevHeight.current = parentRef?.current?.scrollHeight;
-
-    setMessages((prev) => [
-      { title: inputVal, id: Math.floor(Math.random() * 1000) },
-      ...prev,
-    ]);
+    // setMessages((prev) => [
+    //   { title: inputVal, id: Math.floor(Math.random() * 1000) },
+    //   ...prev,
+    // ]);
   };
 
-  const handleAddAbove = () => {
-    prevHeight.current = parentRef?.current?.scrollHeight;
+  const handleAddAbove = async () => {
+    try {
+      //   let newMessages = [...messages];
+      //   const { data } = await axios.get(
+      //     `https://jsonplaceholder.typicode.com/photos?_start=${5}&_limit=5`
+      //   );
+      //   newMessages = [...newMessages, ...data];
+      //   setMessages(newMessages);
+    } catch (error) {
+      console.log(error);
+    }
 
-    setMessages((prev) => [
-      ...prev,
-      { title: inputVal, id: Math.floor(Math.random() * 1000) },
-    ]);
+    // setMessages((prev) => [
+    //   ...prev,
+    //   { title: inputVal, id: Math.floor(Math.random() * 1000) },
+    // ]);
   };
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
         const { data } = await axios.get(
-          "https://jsonplaceholder.typicode.com/photos?_start=0&_limit=5"
+          `https://jsonplaceholder.typicode.com/photos?_start=${10}&_limit=5`
         );
 
         setMessages(data);
@@ -89,6 +87,8 @@ function App() {
             key={message.id}
             style={{ background: "gray", width: "100px", padding: "15px 50px" }}
           >
+            <img src={message.url} style={{ width: "300px" }} />
+
             <h4 style={{ wordBreak: "break-word" }}>
               {message.id} - {message.title}
             </h4>
